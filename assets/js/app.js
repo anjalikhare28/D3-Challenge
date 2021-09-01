@@ -46,17 +46,17 @@ function successHandle(statesData) {
   // Loop through the data and pass argument data
   statesData.map(function (data) {
     data.poverty = +data.poverty;
-    data.obesity = +data.obesity;
+    data.healthcare = +data.healthcare;
   });
 
   //  Create scale functions
   // Linear Scale takes the min to be displayed in axis, and the max of the data
   var xLinearScale = d3.scaleLinear()
-    .domain([8.1, d3.max(statesData, d => d.poverty)])
+    .domain([8.1, d3.max(statesData, d => d.healthcare)])
     .range([0, width]);
 
   var yLinearScale = d3.scaleLinear()
-    .domain([20, d3.max(statesData, d => d.obesity)])
+    .domain([0, d3.max(statesData, d => d.healthcare)])
     .range([height, 0]);
 
   // Create axis functions by calling the scale functions
@@ -86,7 +86,7 @@ function successHandle(statesData) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d.poverty))
-    .attr("cy", d => yLinearScale(d.obesity))
+    .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", "13")
     .attr("fill", "#788dc2")
     .attr("opacity", ".75")
@@ -99,7 +99,7 @@ function successHandle(statesData) {
     .enter()
     .append("text")
     .attr("x", d => xLinearScale(d.poverty))
-    .attr("y", d => yLinearScale(d.obesity))
+    .attr("y", d => yLinearScale(d.healthcare))
     .style("font-size", "13px")
     .style("text-anchor", "middle")
     .style('fill', 'white')
@@ -111,7 +111,7 @@ function successHandle(statesData) {
     .attr("class", "tooltip")
     .offset([80, -60])
     .html(function (d) {
-      return (`${d.state}<br>Poverty: ${d.poverty}%<br>Obesity: ${d.obesity}% `);
+      return (`${d.state}<br>Poverty: ${d.poverty}%<br>Lacks Healthcare: ${d.healthcare}% `);
     });
 
   // Step 7: Create tooltip in the chart
@@ -131,11 +131,11 @@ function successHandle(statesData) {
   // Create axes labels
   chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left + 40)
+    .attr("y", 0 - margin.left + 10)
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .attr("class", "axisText")
-    .text("Obese (%)");
+    .text("Lacks Healthcare (%)");
 
   chartGroup.append("text")
     .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
